@@ -1,4 +1,4 @@
-package com.sistemas.pdv.entities;
+package com.sistemas.pdv.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

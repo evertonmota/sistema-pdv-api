@@ -1,11 +1,8 @@
-package com.sistemas.pdv.entities;
-
-
+package com.sistemas.pdv.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 @NoArgsConstructor
 @AllArgsConstructor

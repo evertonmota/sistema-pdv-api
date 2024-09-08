@@ -1,4 +1,4 @@
-package com.sistemas.pdv.entities;
+package com.sistemas.pdv.entity;
 
 
 import jakarta.persistence.*;
@@ -19,9 +19,9 @@ public class Product {
     private Long id;
     @Column(length = 100, nullable = false )
     private String name;
-    @Column(length = 20, precision = 2)
+    @Column
     private BigDecimal price;
-    @Column(nullable = true)
+    @Column
     private int quantity;
 
 }
