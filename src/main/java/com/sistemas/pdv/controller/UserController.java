@@ -5,6 +5,7 @@ import com.sistemas.pdv.dto.UserDTO;
 import com.sistemas.pdv.entity.User;
 import com.sistemas.pdv.exceptions.NoItemException;
 import com.sistemas.pdv.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity create(@RequestBody User user){
+    public ResponseEntity create(@Valid @RequestBody UserDTO user){
         try {
             user.setEnabled(true);
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
@@ -38,11 +39,9 @@ public class UserController {
         }
     }
     @PutMapping()
-    public ResponseEntity edit(@RequestBody User user){
+    public ResponseEntity edit(@Valid @RequestBody UserDTO user){
         try {
             return new ResponseEntity<>(userService.update(user), HttpStatus.OK);
-        }catch (NoItemException error){
-            return new ResponseEntity<>(new ResponseDTO(error.getMessage()), HttpStatus.BAD_REQUEST);
         }catch(Exception e){
             return new ResponseEntity<>(new ResponseDTO(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
