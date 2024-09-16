@@ -1,6 +1,6 @@
 package com.sistemas.pdv.service;
 
-import com.sistemas.pdv.dto.ProductDTO;
+import com.sistemas.pdv.dto.ProductSaleDTO;
 import com.sistemas.pdv.dto.ProductInfoDTO;
 import com.sistemas.pdv.dto.SaleDTO;
 import com.sistemas.pdv.dto.SaleInfoDTO;
@@ -16,17 +16,14 @@ import com.sistemas.pdv.repository.SaleRepository;
 import com.sistemas.pdv.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -54,12 +51,25 @@ public class SaleService {
 */
         //PADRÃO BUILDER
 
+        var products = getProductInfo(sale.getItems());
+        BigDecimal total = getTotal(products);
+
         return SaleInfoDTO.builder()
                 .user(sale.getUser().getName())
                 .data(sale.getSaleDate().format(DateTimeFormatter.ofPattern("dd/MM//yyyy")))
-                .products(getProductInfo(sale.getItems()))
+                .products(products)
+                .total(total)
                 .build();
     }
+
+    private BigDecimal getTotal(List<ProductInfoDTO> products) {
+        BigDecimal total = new BigDecimal(0);
+        for(int i=0; i< products.size(); i++){
+            total = total.add(products.get(i).getPrice().multiply(new BigDecimal(products.get(i).getQuantity())));
+        }
+        return total;
+    }
+
     private List<ProductInfoDTO> getProductInfo(List<ItemSale> items) {
 
         if(CollectionUtils.isEmpty(items)){
@@ -69,9 +79,10 @@ public class SaleService {
         return items.stream().map(
                  item -> ProductInfoDTO
                 .builder()
-                .id(item.getProduct().getId())
+                .id(item.getId())
+                .price(item.getProduct().getPrice())
                 .name(item.getProduct().getName())
-                         .quantity(item.getQuantity()).build()
+                .quantity(item.getQuantity()).build()
         ).collect(Collectors.toList());
 
     /*  return items.stream().map(item -> {
@@ -106,7 +117,7 @@ public class SaleService {
         }
     }
     /* O MAP ele transforma uma COLEÇÃO em OUTRA. Neste exemplo eu tenho uma coleção de products e o retorno sera uma coleção de ItemSale. */
-    private List<ItemSale> getItemSale(List<ProductDTO> products){
+    private List<ItemSale> getItemSale(List<ProductSaleDTO> products){
 
         if(products.isEmpty()){
             throw new InvalidOperationException("Não foi possível adicionar a venda sem Itens.");

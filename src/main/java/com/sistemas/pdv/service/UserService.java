@@ -25,9 +25,7 @@ public class UserService {
                 user -> new UserDTO(user.getId(),user.getName(), user.isEnabled())).collect(Collectors.toList());
     }
     public UserDTO save(UserDTO user){
-        User entity = new User();
-        entity.setEnabled(user.isEnabled() );
-        entity.setName(user.getName());
+        User entity = mapper.map(user, User.class);
 
         userRepository.save(entity);
         return new UserDTO(entity.getId(),entity.getName(), entity.isEnabled());
@@ -43,10 +41,7 @@ public class UserService {
     }
 
     public UserDTO update(UserDTO user){
-        User entity = new User();
-        entity.setId(user.getId());
-        entity.setEnabled(user.isEnabled() );
-        entity.setName(user.getName());
+        User entity = mapper.map(user, User.class);
 
         Optional<User> userToEdit = userRepository.findById(entity.getId());
 
