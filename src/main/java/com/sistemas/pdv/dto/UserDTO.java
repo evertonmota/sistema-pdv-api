@@ -1,18 +1,17 @@
 package com.sistemas.pdv.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ProductDTO {
+@AllArgsConstructor
+public class UserDTO {
 
-    private Long productId;
-    private int quantity;
-
+   private Long id;
+   private String name;
+   private boolean isEnabled;
 }
