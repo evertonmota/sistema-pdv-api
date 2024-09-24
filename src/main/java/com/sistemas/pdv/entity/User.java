@@ -23,6 +23,6 @@ public class User {
     private String name;
     private boolean isEnabled;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<Sale> sales;
 }
