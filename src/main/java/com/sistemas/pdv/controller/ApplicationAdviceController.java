@@ -3,12 +3,13 @@ package com.sistemas.pdv.controller;
 import com.sistemas.pdv.dto.ResponseDTO;
 import com.sistemas.pdv.exceptions.InvalidOperationException;
 import com.sistemas.pdv.exceptions.NoItemException;
+import com.sistemas.pdv.exceptions.PasswordNotFoundException;
+import com.sistemas.pdv.exceptions.UsernameNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
@@ -47,5 +48,18 @@ public class ApplicationAdviceController {
             erros.add(erroMessage);
         });
         return new ResponseDTO(erros);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseDTO handlerUsernameNotFoundException(UsernameNotFoundException ex){
+        return new ResponseDTO(ex.getMessage());
+    }
+
+
+    @ExceptionHandler(PasswordNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseDTO handlerPasswordNotFoundException(PasswordNotFoundException ex){
+        return new ResponseDTO(ex.getMessage());
     }
 }
